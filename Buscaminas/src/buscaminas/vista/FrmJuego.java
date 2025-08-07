@@ -8,14 +8,14 @@ package buscaminas.vista;
  *
  * @author dylan
  */
-public class VentanaJuego extends javax.swing.JFrame {
+public class FrmJuego extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaJuego.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmJuego.class.getName());
 
     /**
-     * Creates new form VentanaJuego
+     * Creates new form FrmJuego
      */
-    public VentanaJuego() {
+    public FrmJuego() {
         initComponents();
     }
 
@@ -28,7 +28,32 @@ public class VentanaJuego extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItemNuevo = new javax.swing.JMenuItem();
+        jMenuItemSalir = new javax.swing.JMenuItem();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jMenu1.setText("File");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Edit");
+        jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("Juego");
+
+        jMenuItemNuevo.setText("Juego Nuevo");
+        jMenu3.add(jMenuItemNuevo);
+
+        jMenuItemSalir.setText("Salir");
+        jMenu3.add(jMenuItemSalir);
+
+        jMenuBar1.add(jMenu3);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -38,7 +63,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 277, Short.MAX_VALUE)
         );
 
         pack();
@@ -66,9 +91,15 @@ public class VentanaJuego extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VentanaJuego().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new FrmJuego().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItemNuevo;
+    private javax.swing.JMenuItem jMenuItemSalir;
     // End of variables declaration//GEN-END:variables
 }
