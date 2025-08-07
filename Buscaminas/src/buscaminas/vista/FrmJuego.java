@@ -3,12 +3,136 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package buscaminas.vista;
-
+import buscaminas.modelo.*;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 /**
  *
  * @author dylan
  */
 public class FrmJuego extends javax.swing.JFrame {
+    private int tamaño;
+private JButton[][] botones;
+private Juego juego;
+private Estadisticas estadisticas = new Estadisticas();
+
+
+private void iniciarJuego() {
+    while (true) {
+        try {
+            String input = JOptionPane.showInputDialog(this, "Ingrese el tamaño del tablero (mayor a 2):");
+            if (input == null) System.exit(0); // Salir si cancela
+            tamaño = Integer.parseInt(input);
+            if (tamaño > 2) break;
+            JOptionPane.showMessageDialog(this, "Debe ingresar un número mayor a 2.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Número inválido");
+        }
+         }
+juego = new Juego(tamaño);
+    crearTablero();
+    mostrarEstadisticas();
+    
+    
+}
+private void crearTablero() {
+    panelTablero.removeAll();
+    panelTablero.setLayout(new GridLayout(tamaño, tamaño));
+    botones = new JButton[tamaño][tamaño];
+    
+    for (int i = 0; i < tamaño; i++) {
+        for (int j = 0; j < tamaño; j++) {
+            JButton btn = new JButton();
+            btn.setPreferredSize(new Dimension(40, 40));
+            int fila = i;
+            int col = j;
+
+            btn.addMouseListener(new MouseAdapter() {
+                public void mousePressed(MouseEvent e) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        manejarDestapar(fila, col);
+                    } else if (SwingUtilities.isRightMouseButton(e)) {
+                        manejarMarcarDesmarcar(fila, col);
+                    }
+                }
+            });
+
+            botones[i][j] = btn;
+            panelTablero.add(btn);
+        }
+    }
+
+    panelTablero.revalidate();
+    panelTablero.repaint();
+}
+private void manejarDestapar(int fila, int col) {
+    if (juego.estaTerminado()) return;
+
+    juego.destapar(fila, col);
+    actualizarBotones();
+
+    if (juego.jugadorPerdio()) {
+        juego.revelarMinas();
+        actualizarBotones();
+        estadisticas.registrarDerrota();
+        JOptionPane.showMessageDialog(this, "¡Perdiste!", "Fin", JOptionPane.ERROR_MESSAGE);
+        preguntarReiniciar();
+    } else if (juego.estaTerminado()) {
+        estadisticas.registrarVictoria();
+        JOptionPane.showMessageDialog(this, "¡Ganaste!", "Fin", JOptionPane.INFORMATION_MESSAGE);
+        preguntarReiniciar();
+    }
+}
+
+private void manejarMarcarDesmarcar(int fila, int col) {
+    Casilla c = juego.getTablero().getCasilla(fila, col);
+    if (!c.estaDescubierta()) {
+        if (c.estaMarcada()) juego.desmarcar(fila, col);
+        else juego.marcar(fila, col);
+        actualizarBotones();
+    }
+}
+private void actualizarBotones() {
+    for (int i = 0; i < tamaño; i++) {
+        for (int j = 0; j < tamaño; j++) {
+            Casilla c = juego.getTablero().getCasilla(i, j);
+            JButton b = botones[i][j];
+
+            if (c.estaDescubierta()) {
+                if (c.tieneMina()) {
+                    b.setText("💣");
+                    b.setBackground(Color.RED);
+                } else {
+                    int n = c.getMinasCerca();
+                    b.setText(n > 0 ? String.valueOf(n) : "");
+                    b.setEnabled(false);
+                    b.setBackground(Color.LIGHT_GRAY);
+                }
+            } else if (c.estaMarcada()) {
+                b.setText("🚩");
+            } else {
+                b.setText("");
+            }
+        }
+    }
+}
+
+private void mostrarEstadisticas() {
+    JOptionPane.showMessageDialog(this, estadisticas.mostrarEstadisticas(), "Estadísticas", JOptionPane.INFORMATION_MESSAGE);
+}
+
+private void preguntarReiniciar() {
+    int opcion = JOptionPane.showConfirmDialog(this, "¿Desea jugar de nuevo?", "Reiniciar", JOptionPane.YES_NO_OPTION);
+    if (opcion == JOptionPane.YES_OPTION) {
+        iniciarJuego();
+    } else {
+        System.exit(0);
+    }
+}
+
+
+
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmJuego.class.getName());
 
@@ -17,6 +141,7 @@ public class FrmJuego extends javax.swing.JFrame {
      */
     public FrmJuego() {
         initComponents();
+        iniciarJuego();
     }
 
     /**
@@ -28,27 +153,41 @@ public class FrmJuego extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        panelTablero = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenuItemNuevo = new javax.swing.JMenuItem();
         jMenuItemSalir = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        javax.swing.GroupLayout panelTableroLayout = new javax.swing.GroupLayout(panelTablero);
+        panelTablero.setLayout(panelTableroLayout);
+        panelTableroLayout.setHorizontalGroup(
+            panelTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        panelTableroLayout.setVerticalGroup(
+            panelTableroLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 277, Short.MAX_VALUE)
+        );
 
         jMenu3.setText("Juego");
 
         jMenuItemNuevo.setText("Juego Nuevo");
+        jMenuItemNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNuevoActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItemNuevo);
 
         jMenuItemSalir.setText("Salir");
+        jMenuItemSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSalirActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItemSalir);
 
         jMenuBar1.add(jMenu3);
@@ -59,15 +198,23 @@ public class FrmJuego extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(panelTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addComponent(panelTablero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuItemNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNuevoActionPerformed
+        iniciarJuego();
+    }//GEN-LAST:event_jMenuItemNuevoActionPerformed
+
+    private void jMenuItemSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSalirActionPerformed
+         System.exit(0);
+    }//GEN-LAST:event_jMenuItemSalirActionPerformed
 
     /**
      * @param args the command line arguments
@@ -95,11 +242,10 @@ public class FrmJuego extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemNuevo;
     private javax.swing.JMenuItem jMenuItemSalir;
+    private javax.swing.JPanel panelTablero;
     // End of variables declaration//GEN-END:variables
 }
