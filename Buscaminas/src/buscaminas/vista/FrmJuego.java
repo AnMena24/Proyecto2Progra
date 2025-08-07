@@ -92,6 +92,12 @@ private void manejarMarcarDesmarcar(int fila, int col) {
         else juego.marcar(fila, col);
         actualizarBotones();
     }
+    if (juego.estaTerminado() && !juego.jugadorPerdio()) {
+    estadisticas.registrarVictoria();
+    JOptionPane.showMessageDialog(this, "¡Ganaste!", "Fin", JOptionPane.INFORMATION_MESSAGE);
+    preguntarReiniciar();
+}
+
 }
 private void actualizarBotones() {
     for (int i = 0; i < tamaño; i++) {
