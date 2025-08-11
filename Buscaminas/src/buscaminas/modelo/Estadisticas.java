@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package buscaminas.modelo;
 
 /**
@@ -24,7 +21,7 @@ public class Estadisticas {
         juegosJugados++;
         juegosGanados++;
     }
-// Registrar cuando el jugador pierde
+// Registrr cuando el jugador pierde
     public void registrarDerrota() {
         juegosJugados++;
         juegosPerdidos++;
@@ -35,7 +32,7 @@ public class Estadisticas {
              + "Juegos Ganados: " + juegosGanados + "\n"
              + "Juegos Perdidos: " + juegosPerdidos;
     }
-// Métodos opcionales si los necesitás por separado
+// Métodos opcionales
     public int getJuegosJugados() {
         return juegosJugados;
     }

@@ -31,7 +31,7 @@ public class Tablero {
             }
         }
     }
-
+// Para poner aleatoriamente las minas
     private void colocarMinasAleatoriamente() {
         Random random = new Random();
         int minasColocadas = 0;

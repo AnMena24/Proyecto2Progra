@@ -32,7 +32,7 @@ public class Juego {
     public boolean jugadorPerdio() {
         return jugadorPerdio;
     }
-
+// Metodo destapar
     public boolean destapar(int fila, int col) {
         Casilla casilla = tablero.getCasilla(fila, col);
 
@@ -53,7 +53,7 @@ public class Juego {
         verificarVictoria();
         return true;
     }
-
+// Destapar Vecinos
     private void destaparVecinos(int fila, int col) {
         for (int i = fila - 1; i <= fila + 1; i++) {
             for (int j = col - 1; j <= col + 1; j++) {
@@ -90,7 +90,7 @@ public class Juego {
             }
         }
     }
-
+// Metodo para dar victoria
     private void verificarVictoria() {
         if (marcadasCorrectamente == tablero.getCantidadMinas()) {
             juegoTerminado = true;
